@@ -1,0 +1,11 @@
+---
+title: "Get Started"
+description: "A brief introduction to civ."
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Get Started}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Introduction
