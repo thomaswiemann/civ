@@ -17,7 +17,9 @@ Depends:
     R (>= 3.6)
 Imports: 
     AER,
-    Ckmeans.1d.dp
+    Ckmeans.1d.dp,
+    MASS,
+    Matrix
 Suggests: 
     testthat (>= 3.0.0),
     covr,
