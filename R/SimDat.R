@@ -2,7 +2,7 @@
 #'
 #' @description Simulated data from the DGP of Wiemann (2023).
 #'
-#' @format A data frame with 500 rows and 6 variables.
+#' @format A data frame with 1000 rows and 6 variables.
 #' \describe{
 #'   \item{y}{The outcome.}
 #'   \item{D}{The endogenous variable.}

@@ -1,6 +1,6 @@
 
 # Data parameters
-nobs = 500
+nobs = 1000
 K0 = 3
 K = 30
 L = 2

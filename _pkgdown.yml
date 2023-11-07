@@ -1,0 +1,37 @@
+url: https://www.thomaswiemann.com/civ
+
+template:
+  bootstrap: 5
+
+home:
+  title: Categorical Instrumental Variables
+  description: Implementation of the categorical instrumental variable estimator
+    proposed by Wiemann (2023).
+  sidebar:
+    structure:
+    - links
+    - license
+    - citation
+    - authors
+    - dev
+
+navbar:
+  structure:
+    left:
+    - intro
+    - reference
+    - articles
+    - tutorials
+    - news
+    right:
+    - search
+    - github
+
+reference:
+- title: Functions
+  contents:
+  - civ
+  - matches("summary")
+- title: Dataset
+  contents:
+  - SimDat

@@ -16,14 +16,14 @@ RoxygenNote: 7.2.3
 Depends: 
     R (>= 3.6)
 Imports: 
+    stats,
     AER,
-    Ckmeans.1d.dp,
-    MASS,
-    Matrix
+    kcmeans
 Suggests: 
     testthat (>= 3.0.0),
     covr,
     knitr,
     rmarkdown
+Remotes: thomaswiemann/kcmeans
 Config/testthat/edition: 3
 VignetteBuilder: knitr
