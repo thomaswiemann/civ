@@ -14,7 +14,7 @@ coverage:
         informational: true
 
 codecov:
- token: YOUR-TOKEN-GOES-HERE
+ token: 90146aea-874f-47f6-ba02-bcd0d03dba64
 
 language: R
 

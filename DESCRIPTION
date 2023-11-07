@@ -8,7 +8,7 @@ Description: Implementation of the categorical instrumental variable estimator
     proposed by Wiemann (2023).
 License: GPL (>= 3)
 URL: https://github.com/thomaswiemann/civ
-BugReports: 
+BugReports:  https://github.com/thomaswiemann/civ/issues
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
