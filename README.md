@@ -10,4 +10,21 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/thomaswiemann/civ/badge)](https://www.codefactor.io/repository/github/thomaswiemann/civ)
 <!-- badges: end -->
 
-something.
+`civ` is an implementation of the categorical instrumental variable
+estimator as proposed by Wiemann (2023). The key feature of `civ` is
+optimal instrumental variable estimation in settings with relatively few
+observations per category by leveraging a regularization assumption that
+implies existence of a latent categorical variable with fixed finite
+support achieving the same first stage fit as the observed instrument.
+
+## Installation
+
+Install the latest development version from GitHub (requires
+[devtools](https://github.com/r-lib/devtools) package):
+
+``` r
+if (!require("devtools")) {
+  install.packages("devtools")
+}
+devtools::install_github("thomaswiemann/civ", dependencies = TRUE)
+```
