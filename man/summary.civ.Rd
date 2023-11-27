@@ -20,13 +20,16 @@ Inference methods for the categorical instrumental variable
 estimators. Simple wrapper for \code{\link[AER:summary.ivreg]{AER::summary.ivreg()}}.
 }
 \examples{
-# Use data from the included simulated dataset
-y <- SimDat$y
-D <- SimDat$D
-Z <- SimDat$Z
-X <- SimDat$X
-# Estimate categorical instrument variable estimator with K = 3
-civ_fit <- civ(y, D, Z, X, K = 3)
+# Simulate data from a simple IV model with 800 observations
+nobs = 800 # sample size
+Z <- sample(1:20, nobs, replace = TRUE) # observed instrument
+Z0 <- Z \%\% 2 # underlying latent instrument
+U_V <- matrix(rnorm(2 * nobs, 0, 1), nobs, 2) \%*\%
+  chol(matrix(c(1, 0.6, 0.6, 1), 2, 2)) # first and second stage errors
+D <- Z0 + U_V[, 2] # endogenous variable
+y <- D + U_V[, 1] # outcome variable
+# Estimate categorical instrument variable estimator with K = 2
+civ_fit <- civ(y, D, Z, K = 3)
 summary(civ_fit)
 }
 \references{

@@ -8,14 +8,22 @@
 
       pkgs = nixpkgs.legacyPackages.${system};
 
+      # Install local version of civ
+      civ = pkgs.rPackages.buildRPackage {
+        name = "civ";
+        src = ./.;
+        # civ dependencies
+        propagatedBuildInputs = with pkgs.rPackages; [AER kcmeans];
+      };
+
       # Fetch kcmeans package from GitHub (until it's on CRAN)
       kcmeans = pkgs.rPackages.buildRPackage {
         name = "kcmeans";
         src = pkgs.fetchFromGitHub {
           owner = "thomaswiemann";
           repo = "kcmeans";
-          rev = "d6139426c9de8da5dd045350929f014900c8ee73";
-          sha256 = "AKN2mnh5WlBIfTYp1frD0aUL18dDYDnRLSnaOzRj+9c=";
+          rev = "62958b74175e46f59d99b554746f56c77031c8e4";
+          sha256 = "iqEhb8NTcnF2IlqSBdHmBI43qOwuSgpfT44C6Ts92Nk=";
         };
         # kcmeans dependencies
         propagatedBuildInputs = with pkgs.rPackages; [Ckmeans_1d_dp MASS Matrix];
@@ -23,6 +31,9 @@
 
       # R packages
       my-R-packages = with pkgs.rPackages; [
+        # this package
+        civ
+        # general develppment packages
         devtools
         pkgdown
         testthat
@@ -33,6 +44,9 @@
         # add other dependencies below
         AER
         kcmeans
+        # dependencies for vignettes only:
+        hdm
+        ranger
       ];
       my-R = [pkgs.R my-R-packages];
 

@@ -9,3 +9,80 @@ vignette: >
 ---
 
 # Introduction
+
+
+```{r, setup}
+library(civ)
+library(AER)
+set.seed(517938)
+```
+
+# Simulate data
+
+```{r}
+# Sample parameters
+nobs = 800 # sample size
+C = 0.858 # first stage coefficient
+sgm_V = sqrt(0.81) # first stage error
+tau_X <- c(-0.5, 0.5) # second stage effects
+
+# Sample controls and instrument
+X <- sample(1:2, nobs, replace = T)
+Z <- model.matrix(~ 0 + as.factor(sample(1:20, nobs, replace = T)):as.factor(X))
+Z_factor <- Z %*% c(1:ncol(Z))
+
+# Create the low-dimensional latent instrument
+Z0 <- Z_factor %% 2 # underlying latent instrument
+
+# Draw first and second stage errors
+U_V <- matrix(rnorm(2 * nobs, 0, 1), nobs, 2) %*% 
+  chol(matrix(c(1, 0.6, 0.6, sgm_V), 2, 2))
+
+# Draw treatment and outcome variables
+D <- Z0 * C + U_V[, 2]
+y <- D * tau_X[X] + U_V[, 1]
+```
+
+```{r}
+table(Z_factor)
+
+table(Z0)
+```
+# Estimation
+
+## CIV
+```{r}
+civ_fit <- civ(y = y, D = D, Z = Z_factor, X = as.factor(X), K = 2)
+civ_res <- summary(civ_fit, vcov = vcovHC(civ_fit$iv_fit, type = "HC1"))$coef
+
+civ_res[2,1:2]
+
+abs(civ_res[2,1]-mean(tau_X[X]))/civ_res[2,2]
+```
+
+# Why does CIV do well?
+
+```{r}
+Z0_hat <- predict(civ_fit$kcmeans_fit, Z_factor, clusters=T) - 1
+
+missclassified <- which((Z0 - Z0_hat) != 0)
+length(missclassified)
+unique(Z_factor[missclassified])
+```
+
+```{r}
+civ_fit_2 <- ivreg(y ~ D + as.factor(X) | as.factor(Z0_hat) + as.factor(X))
+civ_res_2 <- summary(civ_fit_2, vcov = vcovHC(civ_fit_2, type = "HC1"))$coef
+
+civ_res_2[2,1:2]
+
+abs(civ_res_2[2,1]-mean(tau_X[X]))/civ_res_2[2,2]
+```
+
+
+
+# References
+Wiemann T (2023). "Optimal Categorical Instruments."
+
+
+
