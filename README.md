@@ -113,17 +113,6 @@ robust standard errors.
 # Load dependencies
 library(civ)
 library(AER)
-#> Loading required package: car
-#> Loading required package: carData
-#> Loading required package: lmtest
-#> Loading required package: zoo
-#> 
-#> Attaching package: 'zoo'
-#> The following objects are masked from 'package:base':
-#> 
-#>     as.Date, as.Date.numeric
-#> Loading required package: sandwich
-#> Loading required package: survival
 
 # Compute CIV with K=2 and conduct inference
 civ_fit <- civ(y = y, D = D, Z = Z, X = as.factor(X), K = 2)
@@ -141,6 +130,77 @@ c(Estimate = civ_res$coef[2, 1], "Std. Error" = civ_res$coef[2, 2],
 #>  1.0063143  0.1086868  0.2409285
 ```
 
+## Why does CIV do well?
+
+The key idea of CIV is to leverage a latent categorical variable `Z0`
+with fewer categories that achieves the same population-level fit in the
+first stage as the observed instrument `Z`. Under the assumption that
+the support of the latent categorical variable is fixed with finite
+cardinality, it is possible to estimate a mapping from the observed
+categories to the latent categories. This estimated mapping can then be
+used to simplify the optimal instrumental variable estimator to a finite
+dimensional regression problem. Asymptotic properties of the CIV
+estimator then follow if the first-stage mapping can be estimated at a
+sufficient rate.
+
+Wiemann (2023) provides sufficient conditions for estimation of the
+mapping at exponential rate using a K-Conditional-Means (KCMeans)
+estimator. The proposed KCMeans estimator is exact and computes very
+quickly with time polynomial in the number of observed categories, thus
+avoiding heuristic solution approaches otherwise associated with
+KMeans-type problems. See also the
+[`kcmeans`](https://www.thomaswiemann.com/kcmeans) R package for
+additional details.
+
+In the considered data generating process, the underlying optimal
+instrument `Z0` has two support points. In the first step, CIV attempts
+to map values of the observed instrument to these support points. The
+below code snippet shows that is largely succeeds in doing so: Among the
+800 observations, only 16 observations are missclassified.
+
+``` r
+# Compute the clustering of instrument values
+Z0_hat <- predict(civ_fit$kcmeans_fit, Z, clusters=T) - 1
+
+# Compare clusters with the true underlying instrument Z0
+missclassified <- ((Z0 - Z0_hat) != 0)
+sum(missclassified)
+#> [1] 16
+```
+
+Thanks to classifying values of the instrument in the first step, the IV
+estimation problem substantially simplifies: Instead of using a
+categorical instrument with 40 values, CIV is equivalent to using the
+constructed binary instrument:
+
+``` r
+# Equivalent CIV using the constructed binary instrument
+civ_fit_2 <- ivreg(y ~ D + as.factor(X) | as.factor(Z0_hat) + as.factor(X))
+civ_res_2 <- summary(civ_fit_2, vcov = vcovHC(civ_fit_2, type = "HC1"))$coef
+
+# Equivalent CIV results:
+c(Estimate = civ_res_2[2, 1], "Std. Error" = civ_res_2[2, 2], 
+  "t-val." = abs(civ_res_2[2, 1]-mean(tau_X[X]))/civ_res_2[2, 2])
+#>   Estimate Std. Error     t-val. 
+#>  1.0063143  0.1086868  0.2409285
+```
+
+Since correct classification requires very few observations per
+instrument, CIV is nearly identical to the infeasible orcle estimator
+that presumes knowledge of the low-dimensional optimal instrument Z0:
+
+``` r
+# Compute the infeasible oracle estimator
+oracle_fit <- ivreg(y ~ D + as.factor(X) | as.factor(Z0) + as.factor(X))
+oracle_res <- summary(oracle_fit, vcov = vcovHC(oracle_fit, type = "HC1"))
+
+# Infeasible oracle results:
+c(Estimate = oracle_res$coef[2, 1], "Std. Error" = oracle_res$coef[2, 2], 
+  "t-val." = abs(oracle_res$coef[2, 1]-mean(tau_X[X]))/oracle_res$coef[2, 2])
+#>   Estimate Std. Error     t-val. 
+#>  1.0184144  0.1065979  0.1321376
+```
+
 ## Comparison of CIV to Alternative Optimal Instrument Estimators
 
 To provide some evidence for the practical benefits of CIV over
@@ -150,7 +210,7 @@ estimator of Belloni et al. (2012), and an IV estimator that uses random
 forests in the first stage.
 
 Key takeaways from the results: TSLS, post-Lasso IV, and random
-forest-based IV are heavily biased
+forest-based IV are heavily biased.
 
 For extensive finite-sample comparisons, see Wiemann (2023;
 [arxiv:123](https://)).
@@ -211,49 +271,10 @@ c(Estimate = ranger_res[2, 1], "Std. Error" = ranger_res[2, 2],
 #> 1.25887072 0.09053253 2.50043521
 ```
 
-## Why does CIV do well?
-
-``` r
-Z0_hat <- predict(civ_fit$kcmeans_fit, Z, clusters=T) - 1
-
-missclassified <- which((Z0 - Z0_hat) != 0)
-length(missclassified)
-#> [1] 16
-unique(Z[missclassified])
-#> [1] 16
-```
-
-In contrast, the true underlying instrument in this sample only has two
-support points:
-
-``` r
-table(Z0)
-#> Z0
-#>   0   1 
-#> 399 401
-```
-
-``` r
-civ_fit <- civ(y = y, D = D, Z = Z, X = as.factor(X), K = 2)
-civ_res <- summary(civ_fit, vcov = vcovHC(civ_fit$iv_fit, type = "HC1"))
-
-c(Estimate = civ_res$coef[2, 1], "Std. Error" = civ_res$coef[2, 2], 
-  "t-val." = abs(civ_res$coef[2, 1]-mean(tau_X[X]))/civ_res$coef[2, 2])
-#>   Estimate Std. Error     t-val. 
-#>  1.0063143  0.1086868  0.2409285
-```
-
-
-
-    ```r
-    civ_fit_2 <- ivreg(y ~ D + as.factor(X) | as.factor(Z0_hat) + as.factor(X))
-    civ_res_2 <- summary(civ_fit_2, vcov = vcovHC(civ_fit_2, type = "HC1"))$coef
-
-    c(Estimate = civ_res_2[2, 1], "Std. Error" = civ_res_2[2, 2], 
-      "t-val." = abs(civ_res_2[2, 1]-mean(tau_X[X]))/civ_res_2[2, 2])
-    #>   Estimate Std. Error     t-val. 
-    #>  1.0063143  0.1086868  0.2409285
-
 # References
 
 Wiemann T (2023). “Optimal Categorical Instruments.”
+
+Belloni A, Chen D, Chernozhukov V, Hansen C (2018). “Sparse Models and
+Methods for Optimal Instruments With an Application to Eminent Domain.”
+Econometrica, 80(6), 2369-2429.

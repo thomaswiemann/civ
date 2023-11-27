@@ -10,6 +10,8 @@
 ^doc$
 ^Meta$
 ^vignettes/articles$
+^vignettes/precompile.R$
+^vignettes/civ.Rmd.txt$
 ^README.Rmd$
 ^cran-comments\.md$
 ^.envrc$
