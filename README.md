@@ -92,7 +92,7 @@ Observations_per_Instrument = table(Z)
 hist(Observations_per_Instrument, breaks = 20)
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+![](man/figures/unnamed-chunk-4-1.png)<!-- -->
 
 Using only the observed instrument `Z`, the goal is to estimate the
 in-sample average treatment effect:
