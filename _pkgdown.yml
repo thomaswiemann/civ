@@ -32,6 +32,3 @@ reference:
   contents:
   - civ
   - matches("summary")
-- title: Dataset
-  contents:
-  - SimDat
