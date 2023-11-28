@@ -43,21 +43,21 @@ the data generating process is given by $$
     Y_i = D_i \pi_{0}(X_i) + X_i\beta_0 + U_i,\qquad \text{and} \qquad
     D_i= m_0(Z_i) + X_i\gamma_0 + V_i,
 $$ where $(U_i, V_i)$ are mean-zero multivariate normal with
-$\sigma_U^2 = 1$, $\sigma_V^2 =\sqrt{0.81}$, and $\sigma_{UV} = 0.6$.
-$D_i$ is a scalar-valued endogenous variable,
-$X_i\sim\textrm{Bernoulli}(0.5)$ is a binary covariate and
-$\beta_0 = \gamma_0 = 0$, and $Z_i$ is the categorical instrument taking
-values in $\{1, \ldots, 40\}$ with equal probability. To introduce
-correlation between $Z_i$ and $X_i$, I further set
+$\sigma_U^2 = 1$, $\sigma_V^2 = 0.9$, and $\sigma_{UV} = 0.6$. $D_i$ is
+a scalar-valued endogenous variable, $X_i\sim\textrm{Bernoulli}(0.5)$ is
+a binary covariate and $\beta_0 = \gamma_0 = 0$, and $Z_i$ is the
+categorical instrument taking values in $\{1, \ldots, 40\}$ with equal
+probability. To introduce correlation between $Z_i$ and $X_i$, I further
+set
 $\Pr(Z_i \text{ is odd}\vert X_i = 0) = \Pr(Z_i \text{ is even}\vert X_i = 1) = 0$.
 The optimal instrument $m_0$ is constructed by first partitioning the
 support of $Z_i$ into two equal subsets and then assigning either $0$ or
-$C$ as values. The scalars $\sigma_V^2$ and $C$ are chosen such that the
-variance of the first stage variable is fixed to 1 and the concentration
-parameter for $n=800$ is $\mu^2 = 180$. The data generating process
-allows for individual treatment effects $\pi_0(X_i)$ to differ with
-covariates. Here, $\pi_0(X_i) = 1 + 0.5(1 - 2X_i)$ so that the expected
-treatment effect is simply $E\pi_0(X) = 1.$
+$C$ as values. The scalar $C$ is chosen such that the variance of the
+first stage variable is fixed to 1 and the concentration parameter for
+$n=800$ is $\mu^2 = 180$. The data generating process allows for
+individual treatment effects $\pi_0(X_i)$ to differ with covariates.
+Here, $\pi_0(X_i) = 1 + 0.5(1 - 2X_i)$ so that the expected treatment
+effect is simply $E\pi_0(X) = 1.$
 
 The code snippet below draws $n=800$ observations from this data
 generating process.
@@ -68,7 +68,7 @@ set.seed(51944)
 # Sample parameters
 nobs = 800 # sample size
 C = 0.858 # first stage coefficient
-sgm_V = sqrt(0.81) # first stage error
+sgm_V = 0.9 # first stage error
 tau_X <- c(-0.5, 0.5) + 1 # second stage effects
 # Sample controls and instrument
 X <- sample(1:2, nobs, replace = T)
