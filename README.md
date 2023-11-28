@@ -39,16 +39,15 @@ devtools::install_github("thomaswiemann/civ", dependencies = TRUE)
 
 To illustrate `civ` on a simple example, consider the data generating
 process from the simulation of Wiemann (2023): For $i = 1, \ldots, n$,
-the data generating process is given by $$
-    Y_i = D_i \pi_{0}(X_i) + X_i\beta_0 + U_i,\qquad \text{and} \qquad
-    D_i= m_0(Z_i) + X_i\gamma_0 + V_i,
-$$ where $(U_i, V_i)$ are mean-zero multivariate normal with
-$\sigma_U^2 = 1$, $\sigma_V^2 = 0.9$, and $\sigma_{UV} = 0.6$. $D_i$ is
-a scalar-valued endogenous variable, $X_i\sim\textrm{Bernoulli}(0.5)$ is
-a binary covariate and $\beta_0 = \gamma_0 = 0$, and $Z_i$ is the
-categorical instrument taking values in $\{1, \ldots, 40\}$ with equal
-probability. To introduce correlation between $Z_i$ and $X_i$, I further
-set
+the data generating process is given by
+$Y_i = D_i \pi_{0}(X_i) + X_i\beta_0 + U_i$ and
+$D_i= m_0(Z_i) + X_i\gamma_0 + V_i,$ where $(U_i, V_i)$ are mean-zero
+multivariate normal with $\sigma_U^2 = 1$, $\sigma_V^2 = 0.9$, and
+$\sigma_{UV} = 0.6$. $D_i$ is a scalar-valued endogenous variable,
+$X_i\sim\textrm{Bernoulli}(0.5)$ is a binary covariate and
+$\beta_0 = \gamma_0 = 0$, and $Z_i$ is the categorical instrument taking
+values in $\{1, \ldots, 40\}$ with equal probability. To introduce
+correlation between $Z_i$ and $X_i$, I further set
 $\Pr(Z_i \text{ is odd}\vert X_i = 0) = \Pr(Z_i \text{ is even}\vert X_i = 1) = 0$.
 The optimal instrument $m_0$ is constructed by first partitioning the
 support of $Z_i$ into two equal subsets and then assigning either $0$ or
