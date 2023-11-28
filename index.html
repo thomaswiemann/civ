@@ -124,11 +124,22 @@
 <div class="section level3">
 <h3 id="estimate-civ">Estimate CIV<a class="anchor" aria-label="anchor" href="#estimate-civ"></a>
 </h3>
-<p>We load the <code>civ</code> package and estimate the categorical instrumental variable estimator where the first stage is restricted to <code>K=2</code> support points. We also load the <code>AER</code> package to compute heteroskedasticity robust standard errors.</p>
+<p>We load the <code>civ</code> package and estimate the categorical instrumental variable estimator where the first stage is restricted to <code>K=2</code> support points. We also load the <code>AER</code> package to compute heteroskedasticity robust standard errors. See also <code><a href="reference/civ.html">?civ</a></code> and <code><a href="reference/summary.civ.html">?summary.civ</a></code> for details.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Load dependencies</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/thomaswiemann/civ" class="external-link">civ</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">AER</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Loading required package: car</span></span>
+<span><span class="co">#&gt; Loading required package: carData</span></span>
+<span><span class="co">#&gt; Loading required package: lmtest</span></span>
+<span><span class="co">#&gt; Loading required package: zoo</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Attaching package: 'zoo'</span></span>
+<span><span class="co">#&gt; The following objects are masked from 'package:base':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     as.Date, as.Date.numeric</span></span>
+<span><span class="co">#&gt; Loading required package: sandwich</span></span>
+<span><span class="co">#&gt; Loading required package: survival</span></span>
 <span></span>
 <span><span class="co"># Compute CIV with K=2 and conduct inference</span></span>
 <span><span class="va">civ_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/civ.html">civ</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">y</span>, D <span class="op">=</span> <span class="va">D</span>, Z <span class="op">=</span> <span class="va">Z</span>, X <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span>, K <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>

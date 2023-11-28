@@ -84,9 +84,6 @@
 
     
     
-<div class="section level2">
-<h2 id="get-started">Get Started<a class="anchor" aria-label="anchor" href="#get-started"></a>
-</h2>
 <p>This article is a brief introduction to <code>civ</code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/thomaswiemann/civ" class="external-link">civ</a></span><span class="op">)</span></span>
@@ -120,24 +117,24 @@ varying numbers of observations per instrument. Using only the observed
 instrument <code>Z</code>, the goal is to estimate the in-sample average
 treatment effect:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">tau_X</span><span class="op">[</span><span class="va">X</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 1.0325</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">tau_X</span><span class="op">[</span><span class="va">X</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 1.0325</span></span></code></pre>
 <p>The code snippet below estimates CIV where the first stage is
 restricted to <code>K=2</code> support points. The <code>AER</code>
 package is used to compute heteroskedasticity robust standard
 errors.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Compute CIV with K=2 and conduct inference</span></span>
 <span><span class="va">civ_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/civ.html">civ</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">y</span>, D <span class="op">=</span> <span class="va">D</span>, Z <span class="op">=</span> <span class="va">Z</span>, X <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span>, K <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="va">civ_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">civ_fit</span>, vcov <span class="op">=</span> <span class="fu"><a href="https://sandwich.R-Forge.R-project.org/reference/vcovHC.html" class="external-link">vcovHC</a></span><span class="op">(</span><span class="va">civ_fit</span><span class="op">$</span><span class="va">iv_fit</span>, type <span class="op">=</span> <span class="st">"HC1"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>The CIV estimate and the corresponding standard error are shown
 below. The associated 95% confidence interval covers the true effect as
 indicated by the <em>t</em>-value of less than 1.96.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>Estimate <span class="op">=</span> <span class="va">civ_res</span><span class="op">$</span><span class="va">coef</span><span class="op">[</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">]</span>, <span class="st">"Std. Error"</span> <span class="op">=</span> <span class="va">civ_res</span><span class="op">$</span><span class="va">coef</span><span class="op">[</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">]</span>,</span>
-<span>  <span class="st">"t-val."</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">civ_res</span><span class="op">$</span><span class="va">coef</span><span class="op">[</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">]</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">tau_X</span><span class="op">[</span><span class="va">X</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="va">civ_res</span><span class="op">$</span><span class="va">coef</span><span class="op">[</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   Estimate Std. Error     t-val. </span></span>
-<span><span class="co">#&gt;  1.0063143  0.1086868  0.2409285</span></span></code></pre></div>
+<span>  <span class="st">"t-val."</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">civ_res</span><span class="op">$</span><span class="va">coef</span><span class="op">[</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">]</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">tau_X</span><span class="op">[</span><span class="va">X</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="va">civ_res</span><span class="op">$</span><span class="va">coef</span><span class="op">[</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##   Estimate Std. Error     t-val. </span></span>
+<span><span class="co">##  1.0063143  0.1086868  0.2409285</span></span></code></pre>
 <p>CIV uses a K-Conditional-Means (KCMeans) estimator in a first step to
 estimate the optimal instrument. To understand the estimated mapping of
 observed instruments to the support points of the latent instrument, it
@@ -147,19 +144,17 @@ for details). The code snippet below prints the results for the first 10
 values of the instrument. Here, <code>x</code> denotes the value of the
 observed instrument while <code>cluster_x</code> denotes the association
 with the estimated optimal instrument.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">civ_fit</span><span class="op">$</span><span class="va">kcmeans_fit</span><span class="op">$</span><span class="va">cluster_map</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">4</span><span class="op">)</span><span class="op">]</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;           [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]</span></span>
-<span><span class="co">#&gt; x           26   20   10   32   23   12    7   25   33    21</span></span>
-<span><span class="co">#&gt; cluster_x    1    1    1    1    2    1    2    2    2     2</span></span></code></pre></div>
-</div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">civ_fit</span><span class="op">$</span><span class="va">kcmeans_fit</span><span class="op">$</span><span class="va">cluster_map</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">4</span><span class="op">)</span><span class="op">]</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##           [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]</span></span>
+<span><span class="co">## x           26   20   10   32   23   12    7   25   33    21</span></span>
+<span><span class="co">## cluster_x    1    1    1    1    2    1    2    2    2     2</span></span></code></pre>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
 <p>Wiemann T (2023). “Optimal Categorical Instruments.”</p>
 </div>
-  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
-    </nav></aside>
+  </main>
 </div>
 
 
