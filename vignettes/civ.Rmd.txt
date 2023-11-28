@@ -8,8 +8,6 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-# Get Started
-
 This article is a brief introduction to ``civ``.
 
 ```{r, setup}

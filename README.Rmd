@@ -76,8 +76,7 @@ mean(tau_X[X])
 
 ### Estimate CIV
 
-We load the ``civ`` package and estimate the categorical instrumental variable estimator where the first stage is restricted to ``K=2`` support points. We also load the ``AER`` package to compute heteroskedasticity robust standard errors.
-
+We load the ``civ`` package and estimate the categorical instrumental variable estimator where the first stage is restricted to ``K=2`` support points. We also load the ``AER`` package to compute heteroskedasticity robust standard errors. See also ``?civ`` and ``?summary.civ`` for details.
 
 ```{r}
 # Load dependencies
@@ -114,7 +113,6 @@ sum(missclassified)
 
 Thanks to classifying values of the instrument in the first step, the IV estimation problem substantially simplifies: Instead of using a categorical instrument with 40 values, CIV is equivalent to using the constructed binary instrument:
 
-
 ```{r}
 # Equivalent CIV using the constructed binary instrument
 civ_fit_2 <- ivreg(y ~ D + as.factor(X) | as.factor(Z0_hat) + as.factor(X))
@@ -125,7 +123,7 @@ c(Estimate = civ_res_2[2, 1], "Std. Error" = civ_res_2[2, 2],
   "t-val." = abs(civ_res_2[2, 1]-mean(tau_X[X]))/civ_res_2[2, 2])
 ```
 
-Since correct classification requires very few observations per instrument, CIV is nearly identical to the infeasible orcle estimator that presumes knowledge of the low-dimensional optimal instrument Z0:
+Since correct classification requires very few observations per instrument, CIV is nearly identical to the infeasible oracle estimator that presumes knowledge of the low-dimensional optimal instrument Z0:
 
 ```{r}
 # Compute the infeasible oracle estimator

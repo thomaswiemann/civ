@@ -106,12 +106,23 @@ mean(tau_X[X])
 We load the `civ` package and estimate the categorical instrumental
 variable estimator where the first stage is restricted to `K=2` support
 points. We also load the `AER` package to compute heteroskedasticity
-robust standard errors.
+robust standard errors. See also `?civ` and `?summary.civ` for details.
 
 ``` r
 # Load dependencies
 library(civ)
 library(AER)
+#> Loading required package: car
+#> Loading required package: carData
+#> Loading required package: lmtest
+#> Loading required package: zoo
+#> 
+#> Attaching package: 'zoo'
+#> The following objects are masked from 'package:base':
+#> 
+#>     as.Date, as.Date.numeric
+#> Loading required package: sandwich
+#> Loading required package: survival
 
 # Compute CIV with K=2 and conduct inference
 civ_fit <- civ(y = y, D = D, Z = Z, X = as.factor(X), K = 2)
