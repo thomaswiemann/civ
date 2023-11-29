@@ -75,8 +75,8 @@
 </h1></div>
 <!-- badges: start -->
 
-<p><code>civ</code> is an implementation of the categorical instrumental variable estimator proposed by Wiemann (2023; <a href="https://" class="external-link">arxiv:123</a>). <code>civ</code> allows for optimal instrumental variable estimation in settings with relatively few observations per category as seen in many economic applications including judge IV designs. To obtain valid inference in these challenging empirical settings, <code>civ</code> leverages a regularization assumption that implies existence of a latent categorical variable with fixed finite support achieving the same first stage fit as the observed instrument.</p>
-<p>See the corresponding working paper <a href="https://" class="external-link">Optimal Categorical Instrumental Variables</a> for further discussion and theoretical details.</p>
+<p><code>civ</code> is an implementation of the categorical instrumental variable estimator proposed by Wiemann (2023; <a href="https://arxiv.org/abs/2311.17021" class="external-link">arxiv:2311.17021</a>). <code>civ</code> allows for optimal instrumental variable estimation in settings with relatively few observations per category as seen in many economic applications including judge IV designs. To obtain valid inference in these challenging empirical settings, <code>civ</code> leverages a regularization assumption that implies existence of a latent categorical variable with fixed finite support achieving the same first stage fit as the observed instrument.</p>
+<p>See the corresponding working paper <a href="https://arxiv.org/abs/2311.17021" class="external-link">Optimal Categorical Instrumental Variables</a> for further discussion and theoretical details.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -129,17 +129,6 @@
 <code class="sourceCode R"><span><span class="co"># Load dependencies</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/thomaswiemann/civ" class="external-link">civ</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">AER</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Loading required package: car</span></span>
-<span><span class="co">#&gt; Loading required package: carData</span></span>
-<span><span class="co">#&gt; Loading required package: lmtest</span></span>
-<span><span class="co">#&gt; Loading required package: zoo</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Attaching package: 'zoo'</span></span>
-<span><span class="co">#&gt; The following objects are masked from 'package:base':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     as.Date, as.Date.numeric</span></span>
-<span><span class="co">#&gt; Loading required package: sandwich</span></span>
-<span><span class="co">#&gt; Loading required package: survival</span></span>
 <span></span>
 <span><span class="co"># Compute CIV with K=2 and conduct inference</span></span>
 <span><span class="va">civ_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/civ.html">civ</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">y</span>, D <span class="op">=</span> <span class="va">D</span>, Z <span class="op">=</span> <span class="va">Z</span>, X <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span>, K <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
@@ -177,7 +166,7 @@
 <span>  <span class="st">"t-val."</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">civ_res_2</span><span class="op">[</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">]</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">tau_X</span><span class="op">[</span><span class="va">X</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="va">civ_res_2</span><span class="op">[</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   Estimate Std. Error     t-val. </span></span>
 <span><span class="co">#&gt;  1.0063143  0.1086868  0.2409285</span></span></code></pre></div>
-<p>Since correct classification requires very few observations per instrument, CIV is nearly identical to the infeasible orcle estimator that presumes knowledge of the low-dimensional optimal instrument Z0:</p>
+<p>Since correct classification requires very few observations per instrument, CIV is nearly identical to the infeasible oracle estimator that presumes knowledge of the low-dimensional optimal instrument Z0:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Compute the infeasible oracle estimator</span></span>
 <span><span class="va">oracle_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/AER/man/ivreg.html" class="external-link">ivreg</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">D</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">Z0</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op">)</span></span>
@@ -194,7 +183,7 @@
 </h2>
 <p>To provide some evidence for the practical benefits of CIV over alternative estimators, consider estimating three commonly considered alternatives: two-stage least squares (TSLS), the post-Lasso IV estimator of Belloni et al. (2012), and an IV estimator that uses random forests in the first stage.</p>
 <p>Key takeaways from the results: TSLS, post-Lasso IV, and random forest-based IV are heavily biased.</p>
-<p>For extensive finite-sample comparisons, see Wiemann (2023; <a href="https://" class="external-link">arxiv:123</a>).</p>
+<p>For extensive finite-sample comparisons, see Wiemann (2023).</p>
 <div class="section level3">
 <h3 id="tsls">TSLS<a class="anchor" aria-label="anchor" href="#tsls"></a>
 </h3>
@@ -248,8 +237,8 @@
 <div class="section level1">
 <h1 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h1>
-<p>Wiemann T (2023). “Optimal Categorical Instruments.”</p>
 <p>Belloni A, Chen D, Chernozhukov V, Hansen C (2018). “Sparse Models and Methods for Optimal Instruments With an Application to Eminent Domain.” Econometrica, 80(6), 2369-2429.</p>
+<p>Wiemann T (2023). “Optimal Categorical Instruments.” <a href="https://arxiv.org/abs/2311.17021" class="external-link uri">https://arxiv.org/abs/2311.17021</a></p>
 </div>
 
   </main><aside class="col-md-3"><div class="links">
