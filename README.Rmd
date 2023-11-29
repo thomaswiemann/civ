@@ -20,9 +20,9 @@ knitr::opts_chunk$set(
 [![CodeFactor](https://www.codefactor.io/repository/github/thomaswiemann/civ/badge)](https://www.codefactor.io/repository/github/thomaswiemann/civ)
 <!-- badges: end -->
 
-``civ`` is an implementation of the categorical instrumental variable estimator proposed by Wiemann (2023;  [arxiv:123](https://)). ``civ`` allows for optimal instrumental variable estimation in settings with relatively few observations per category as seen in many economic applications including judge IV designs. To obtain valid inference in these challenging empirical settings, ``civ`` leverages a regularization assumption that implies existence of a latent categorical variable with fixed finite support achieving the same first stage fit as the observed instrument.
+``civ`` is an implementation of the categorical instrumental variable estimator proposed by Wiemann (2023;  [arxiv:2311.17021](https://arxiv.org/abs/2311.17021)). ``civ`` allows for optimal instrumental variable estimation in settings with relatively few observations per category as seen in many economic applications including judge IV designs. To obtain valid inference in these challenging empirical settings, ``civ`` leverages a regularization assumption that implies existence of a latent categorical variable with fixed finite support achieving the same first stage fit as the observed instrument.
 
-See the corresponding working paper [Optimal Categorical Instrumental Variables](https://) for further discussion and theoretical details.
+See the corresponding working paper [Optimal Categorical Instrumental Variables](https://arxiv.org/abs/2311.17021) for further discussion and theoretical details.
 
 ## Installation
 
@@ -142,7 +142,7 @@ To provide some evidence for the practical benefits of CIV over alternative esti
 
 Key takeaways from the results: TSLS, post-Lasso IV, and random forest-based IV are heavily biased.
 
-For extensive finite-sample comparisons, see Wiemann (2023;  [arxiv:123](https://)).
+For extensive finite-sample comparisons, see Wiemann (2023).
 
 ### TSLS
 
@@ -189,6 +189,7 @@ c(Estimate = ranger_res[2, 1], "Std. Error" = ranger_res[2, 2],
 ```
 
 # References
-Wiemann T (2023). "Optimal Categorical Instruments."
 
 Belloni A, Chen D, Chernozhukov V, Hansen C (2018). “Sparse Models and Methods for Optimal Instruments With an Application to Eminent Domain.” Econometrica, 80(6), 2369-2429.
+
+Wiemann T (2023). "Optimal Categorical Instruments." https://arxiv.org/abs/2311.17021

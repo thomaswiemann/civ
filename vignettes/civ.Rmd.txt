@@ -67,4 +67,4 @@ t(head(civ_fit$kcmeans_fit$cluster_map[, c(1, 4)], 10))
 ```
 
 # References
-Wiemann T (2023). "Optimal Categorical Instruments."
+Wiemann T (2023). "Optimal Categorical Instruments." https://arxiv.org/abs/2311.17021

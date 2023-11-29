@@ -11,17 +11,19 @@
 <!-- badges: end -->
 
 `civ` is an implementation of the categorical instrumental variable
-estimator proposed by Wiemann (2023; [arxiv:123](https://)). `civ`
-allows for optimal instrumental variable estimation in settings with
-relatively few observations per category as seen in many economic
-applications including judge IV designs. To obtain valid inference in
-these challenging empirical settings, `civ` leverages a regularization
+estimator proposed by Wiemann (2023;
+[arxiv:2311.17021](https://arxiv.org/abs/2311.17021)). `civ` allows for
+optimal instrumental variable estimation in settings with relatively few
+observations per category as seen in many economic applications
+including judge IV designs. To obtain valid inference in these
+challenging empirical settings, `civ` leverages a regularization
 assumption that implies existence of a latent categorical variable with
 fixed finite support achieving the same first stage fit as the observed
 instrument.
 
 See the corresponding working paper [Optimal Categorical Instrumental
-Variables](https://) for further discussion and theoretical details.
+Variables](https://arxiv.org/abs/2311.17021) for further discussion and
+theoretical details.
 
 ## Installation
 
@@ -112,17 +114,6 @@ robust standard errors. See also `?civ` and `?summary.civ` for details.
 # Load dependencies
 library(civ)
 library(AER)
-#> Loading required package: car
-#> Loading required package: carData
-#> Loading required package: lmtest
-#> Loading required package: zoo
-#> 
-#> Attaching package: 'zoo'
-#> The following objects are masked from 'package:base':
-#> 
-#>     as.Date, as.Date.numeric
-#> Loading required package: sandwich
-#> Loading required package: survival
 
 # Compute CIV with K=2 and conduct inference
 civ_fit <- civ(y = y, D = D, Z = Z, X = as.factor(X), K = 2)
@@ -196,7 +187,7 @@ c(Estimate = civ_res_2[2, 1], "Std. Error" = civ_res_2[2, 2],
 ```
 
 Since correct classification requires very few observations per
-instrument, CIV is nearly identical to the infeasible orcle estimator
+instrument, CIV is nearly identical to the infeasible oracle estimator
 that presumes knowledge of the low-dimensional optimal instrument Z0:
 
 ``` r
@@ -222,8 +213,7 @@ forests in the first stage.
 Key takeaways from the results: TSLS, post-Lasso IV, and random
 forest-based IV are heavily biased.
 
-For extensive finite-sample comparisons, see Wiemann (2023;
-[arxiv:123](https://)).
+For extensive finite-sample comparisons, see Wiemann (2023).
 
 ### TSLS
 
@@ -283,8 +273,9 @@ c(Estimate = ranger_res[2, 1], "Std. Error" = ranger_res[2, 2],
 
 # References
 
-Wiemann T (2023). “Optimal Categorical Instruments.”
-
 Belloni A, Chen D, Chernozhukov V, Hansen C (2018). “Sparse Models and
 Methods for Optimal Instruments With an Application to Eminent Domain.”
 Econometrica, 80(6), 2369-2429.
+
+Wiemann T (2023). “Optimal Categorical Instruments.”
+<https://arxiv.org/abs/2311.17021>

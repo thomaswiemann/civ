@@ -31,7 +31,7 @@
 #' Fox J, Kleiber C, Zeileis A (2023). "ivreg: Instrumental-Variables Regression
 #'     by '2SLS', '2SM', or '2SMM', with Diagnostics". R package.
 #'
-#' Wiemann T (2023). "Optimal Categorical Instruments."
+#' Wiemann T (2023). "Optimal Categorical Instruments." https://arxiv.org/abs/2311.17021
 #'
 #' @examples
 #' # Simulate data from a simple IV model with 800 observations
@@ -89,7 +89,7 @@ civ <- function(y, D, Z, X = NULL, K = 2) {
 #' Fox J, Kleiber C, Zeileis A (2023). "ivreg: Instrumental-Variables Regression
 #'     by '2SLS', '2SM', or '2SMM', with Diagnostics". R package.
 #'
-#' Wiemann T (2023). "Optimal Categorical Instruments."
+#' Wiemann T (2023). "Optimal Categorical Instruments." https://arxiv.org/abs/2311.17021
 #'
 #' @export
 #'
