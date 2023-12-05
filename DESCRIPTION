@@ -5,7 +5,7 @@ Date: 2023-10-27
 Authors@R: c(
     person("Thomas", "Wiemann", role = c("aut", "cre"), email = "wiemann@uchicago.edu"))
 Description: Implementation of the categorical instrumental variable (CIV) 
-    estimator proposed by Wiemann (2023). CIV allows for optimal instrumental 
+    estimator proposed by Wiemann (2023) <arXiv:2311.17021>. CIV allows for optimal instrumental 
     variable estimation in settings with relatively few observations per 
     category. To obtain valid inference in these challenging settings, CIV
     leverages a regularization assumption that implies existence of a latent 
@@ -29,6 +29,5 @@ Suggests:
     covr,
     knitr,
     rmarkdown
-Remotes: thomaswiemann/kcmeans
 Config/testthat/edition: 3
 VignetteBuilder: knitr

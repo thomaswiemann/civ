@@ -8,6 +8,8 @@
 [![R-CMD-check](https://github.com/thomaswiemann/civ/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/thomaswiemann/civ/actions/workflows/R-CMD-check.yaml)
 [![codecov](https://codecov.io/gh/thomaswiemann/civ/branch/main/graph/badge.svg?token=PHB9W2TJ6S)](https://app.codecov.io/gh/thomaswiemann/civ)
 [![CodeFactor](https://www.codefactor.io/repository/github/thomaswiemann/civ/badge)](https://www.codefactor.io/repository/github/thomaswiemann/civ)
+[![CRAN
+Version](https://www.r-pkg.org/badges/version/civ)](https://cran.r-project.org/package=civ)
 <!-- badges: end -->
 
 `civ` is an implementation of the categorical instrumental variable
@@ -35,6 +37,12 @@ if (!require("devtools")) {
   install.packages("devtools")
 }
 devtools::install_github("thomaswiemann/civ", dependencies = TRUE)
+```
+
+Install the latest public release from CRAN:
+
+``` r
+install.packages("civ")
 ```
 
 ## Example from the Simulation of Wiemann (2023)
@@ -93,7 +101,7 @@ Observations_per_Instrument = table(Z)
 hist(Observations_per_Instrument, breaks = 20)
 ```
 
-![](man/figures/unnamed-chunk-4-1.png)<!-- -->
+![](man/figures/unnamed-chunk-5-1.png)<!-- -->
 
 Using only the observed instrument `Z`, the goal is to estimate the
 in-sample average treatment effect:
@@ -114,6 +122,23 @@ robust standard errors. See also `?civ` and `?summary.civ` for details.
 # Load dependencies
 library(civ)
 library(AER)
+#> Warning: package 'AER' was built under R version 4.3.1
+#> Loading required package: car
+#> Warning: package 'car' was built under R version 4.3.1
+#> Loading required package: carData
+#> Warning: package 'carData' was built under R version 4.3.1
+#> Loading required package: lmtest
+#> Warning: package 'lmtest' was built under R version 4.3.1
+#> Loading required package: zoo
+#> Warning: package 'zoo' was built under R version 4.3.1
+#> 
+#> Attaching package: 'zoo'
+#> The following objects are masked from 'package:base':
+#> 
+#>     as.Date, as.Date.numeric
+#> Loading required package: sandwich
+#> Warning: package 'sandwich' was built under R version 4.3.1
+#> Loading required package: survival
 
 # Compute CIV with K=2 and conduct inference
 civ_fit <- civ(y = y, D = D, Z = Z, X = as.factor(X), K = 2)
@@ -150,7 +175,7 @@ estimator. The proposed KCMeans estimator is exact and computes very
 quickly with time polynomial in the number of observed categories, thus
 avoiding heuristic solution approaches otherwise associated with
 KMeans-type problems. See also the
-[`kcmeans`](https://www.thomaswiemann.com/kcmeans) R package for
+[`kcmeans`](https://www.thomaswiemann.com/kcmeans/) R package for
 additional details.
 
 In the considered data generating process, the underlying optimal
@@ -241,6 +266,7 @@ in-sample treatment effect as indicated by the *t*-value of more than
 ``` r
 # Estimate post-Lasso IV with the plug-in penalty
 library(hdm)
+#> Warning: package 'hdm' was built under R version 4.3.1
 hdm_fit <- rlassoIV(y ~ D + as.factor(X) | as.factor(Z) + as.factor(X), 
                     select.X = F)
 hdm_res <- c(hdm_fit$coefficients, hdm_fit$se)
@@ -260,6 +286,7 @@ treatment effect as indicated by the *t*-value of more than 1.96.
 
 ``` r
 library(ranger)
+#> Warning: package 'ranger' was built under R version 4.3.1
 df <- data.frame(D = D, Z = as.factor(Z), X = as.factor(X))
 mhat <- predict(ranger(D ~  Z + X, data = df), df)$predictions
 ranger_fit <- ivreg(y ~ D + as.factor(X) | mhat + as.factor(X))

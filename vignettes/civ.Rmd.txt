@@ -61,7 +61,7 @@ c(Estimate = civ_res$coef[2, 1], "Std. Error" = civ_res$coef[2, 2],
   "t-val." = abs(civ_res$coef[2, 1]-mean(tau_X[X]))/civ_res$coef[2, 2])
 ```
 
-CIV uses a K-Conditional-Means (KCMeans) estimator in a first step to estimate the optimal instrument. To understand the estimated mapping of observed instruments to the support points of the latent instrument, it is useful to print the ``cluster_map`` attribute of the first-stage ``kcmeans_fit`` object (see also [``kcmeans``](https://www.thomaswiemann.com/kcmeans) for details). The code snippet below prints the results for the first 10 values of the instrument. Here, ``x`` denotes the value of the observed instrument while ``cluster_x`` denotes the association with the estimated optimal instrument.
+CIV uses a K-Conditional-Means (KCMeans) estimator in a first step to estimate the optimal instrument. To understand the estimated mapping of observed instruments to the support points of the latent instrument, it is useful to print the ``cluster_map`` attribute of the first-stage ``kcmeans_fit`` object (see also [``kcmeans``](https://www.thomaswiemann.com/kcmeans/) for details). The code snippet below prints the results for the first 10 values of the instrument. Here, ``x`` denotes the value of the observed instrument while ``cluster_x`` denotes the association with the estimated optimal instrument.
 ```{r}
 t(head(civ_fit$kcmeans_fit$cluster_map[, c(1, 4)], 10))
 ```
