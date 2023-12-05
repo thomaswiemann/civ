@@ -1,6 +1,6 @@
 Package: civ
 Title: Categorical Instrumental Variables
-Version: 0.0.0.9000
+Version: 0.1.0
 Date: 2023-10-27
 Authors@R: c(
     person("Thomas", "Wiemann", role = c("aut", "cre"), email = "wiemann@uchicago.edu"))
@@ -13,7 +13,7 @@ Description: Implementation of the categorical instrumental variable (CIV)
     stage fit as the observed instrument.
 License: GPL (>= 3)
 URL: https://github.com/thomaswiemann/civ
-BugReports:  https://github.com/thomaswiemann/civ/issues
+BugReports: https://github.com/thomaswiemann/civ/issues
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
