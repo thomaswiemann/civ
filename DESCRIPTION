@@ -1,7 +1,7 @@
 Package: civ
 Title: Categorical Instrumental Variables
 Version: 0.1.0
-Date: 2023-10-27
+Date: 2023-12-07
 Authors@R: c(
     person("Thomas", "Wiemann", role = c("aut", "cre"), email = "wiemann@uchicago.edu"))
 Description: Implementation of the categorical instrumental variable (CIV) 
