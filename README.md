@@ -175,7 +175,7 @@ estimator. The proposed KCMeans estimator is exact and computes very
 quickly with time polynomial in the number of observed categories, thus
 avoiding heuristic solution approaches otherwise associated with
 KMeans-type problems. See also the
-[`kcmeans`](https://www.thomaswiemann.com/kcmeans/) R package for
+[`kcmeans`](https://thomaswiemann.com/kcmeans/) R package for
 additional details.
 
 In the considered data generating process, the underlying optimal
