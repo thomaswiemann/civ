@@ -1,6 +1,6 @@
 Package: civ
 Title: Categorical Instrumental Variables
-Version: 0.1.0
+Version: 0.1.0.9000
 Date: 2023-12-07
 Authors@R: c(
     person("Thomas", "Wiemann", role = c("aut", "cre"), email = "wiemann@uchicago.edu"))
