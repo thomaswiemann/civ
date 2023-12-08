@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="index.html">civ</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -86,13 +86,16 @@
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"thomaswiemann/civ"</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p>Install the latest public release from CRAN:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"civ"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="example-from-the-simulation-of-wiemann-2023">Example from the Simulation of Wiemann (2023)<a class="anchor" aria-label="anchor" href="#example-from-the-simulation-of-wiemann-2023"></a>
 </h2>
 <p>To illustrate <code>civ</code> on a simple example, consider the data generating process from the simulation of Wiemann (2023): For <span class="math inline"><em>i</em> = 1, …, <em>n</em></span>, the data generating process is given by <span class="math inline"><em>Y</em><sub><em>i</em></sub> = <em>D</em><sub><em>i</em></sub><em>π</em><sub>0</sub>(<em>X</em><sub><em>i</em></sub>) + <em>X</em><sub><em>i</em></sub><em>β</em><sub>0</sub> + <em>U</em><sub><em>i</em></sub></span> and <span class="math inline"><em>D</em><sub><em>i</em></sub> = <em>m</em><sub>0</sub>(<em>Z</em><sub><em>i</em></sub>) + <em>X</em><sub><em>i</em></sub><em>γ</em><sub>0</sub> + <em>V</em><sub><em>i</em></sub>,</span> where <span class="math inline">(<em>U</em><sub><em>i</em></sub>,<em>V</em><sub><em>i</em></sub>)</span> are mean-zero multivariate normal with <span class="math inline"><em>σ</em><sub><em>U</em></sub><sup>2</sup> = 1</span>, <span class="math inline"><em>σ</em><sub><em>V</em></sub><sup>2</sup> = 0.9</span>, and <span class="math inline"><em>σ</em><sub><em>U</em><em>V</em></sub> = 0.6</span>. <span class="math inline"><em>D</em><sub><em>i</em></sub></span> is a scalar-valued endogenous variable, <span class="math inline"><em>X</em><sub><em>i</em></sub> ∼ Bernoulli(0.5)</span> is a binary covariate and <span class="math inline"><em>β</em><sub>0</sub> = <em>γ</em><sub>0</sub> = 0</span>, and <span class="math inline"><em>Z</em><sub><em>i</em></sub></span> is the categorical instrument taking values in <span class="math inline">{1, …, 40}</span> with equal probability. To introduce correlation between <span class="math inline"><em>Z</em><sub><em>i</em></sub></span> and <span class="math inline"><em>X</em><sub><em>i</em></sub></span>, I further set <span class="math inline">Pr (<em>Z</em><sub><em>i</em></sub> is odd|<em>X</em><sub><em>i</em></sub>=0) = Pr (<em>Z</em><sub><em>i</em></sub> is even|<em>X</em><sub><em>i</em></sub>=1) = 0</span>. The optimal instrument <span class="math inline"><em>m</em><sub>0</sub></span> is constructed by first partitioning the support of <span class="math inline"><em>Z</em><sub><em>i</em></sub></span> into two equal subsets and then assigning either <span class="math inline">0</span> or <span class="math inline"><em>C</em></span> as values. The scalar <span class="math inline"><em>C</em></span> is chosen such that the variance of the first stage variable is fixed to 1 and the concentration parameter for <span class="math inline"><em>n</em> = 800</span> is <span class="math inline"><em>μ</em><sup>2</sup> = 180</span>. The data generating process allows for individual treatment effects <span class="math inline"><em>π</em><sub>0</sub>(<em>X</em><sub><em>i</em></sub>)</span> to differ with covariates. Here, <span class="math inline"><em>π</em><sub>0</sub>(<em>X</em><sub><em>i</em></sub>) = 1 + 0.5(1−2<em>X</em><sub><em>i</em></sub>)</span> so that the expected treatment effect is simply <span class="math inline"><em>E</em><em>π</em><sub>0</sub>(<em>X</em>) = 1.</span></p>
 <p>The code snippet below draws <span class="math inline"><em>n</em> = 800</span> observations from this data generating process.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Set seed</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">51944</span><span class="op">)</span></span>
 <span><span class="co"># Sample parameters</span></span>
@@ -113,28 +116,45 @@
 <span><span class="va">D</span> <span class="op">&lt;-</span> <span class="va">Z0</span> <span class="op">*</span> <span class="va">C</span> <span class="op">+</span> <span class="va">U_V</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span></span>
 <span><span class="va">y</span> <span class="op">&lt;-</span> <span class="va">D</span> <span class="op">*</span> <span class="va">tau_X</span><span class="op">[</span><span class="va">X</span><span class="op">]</span> <span class="op">+</span> <span class="va">U_V</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span></span></code></pre></div>
 <p>In the generated sample, the observed instrument takes 40 values with varying numbers of observations per instrument:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Observations_per_Instrument</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">Z</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">Observations_per_Instrument</span>, breaks <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/unnamed-chunk-4-1.png"><!-- --></p>
+<p><img src="reference/figures/unnamed-chunk-5-1.png"><!-- --></p>
 <p>Using only the observed instrument <code>Z</code>, the goal is to estimate the in-sample average treatment effect:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">tau_X</span><span class="op">[</span><span class="va">X</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 1.0325</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="estimate-civ">Estimate CIV<a class="anchor" aria-label="anchor" href="#estimate-civ"></a>
 </h3>
 <p>We load the <code>civ</code> package and estimate the categorical instrumental variable estimator where the first stage is restricted to <code>K=2</code> support points. We also load the <code>AER</code> package to compute heteroskedasticity robust standard errors. See also <code><a href="reference/civ.html">?civ</a></code> and <code><a href="reference/summary.civ.html">?summary.civ</a></code> for details.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Load dependencies</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/thomaswiemann/civ" class="external-link">civ</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">AER</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: package 'AER' was built under R version 4.3.1</span></span>
+<span><span class="co">#&gt; Loading required package: car</span></span>
+<span><span class="co">#&gt; Warning: package 'car' was built under R version 4.3.1</span></span>
+<span><span class="co">#&gt; Loading required package: carData</span></span>
+<span><span class="co">#&gt; Warning: package 'carData' was built under R version 4.3.1</span></span>
+<span><span class="co">#&gt; Loading required package: lmtest</span></span>
+<span><span class="co">#&gt; Warning: package 'lmtest' was built under R version 4.3.1</span></span>
+<span><span class="co">#&gt; Loading required package: zoo</span></span>
+<span><span class="co">#&gt; Warning: package 'zoo' was built under R version 4.3.1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Attaching package: 'zoo'</span></span>
+<span><span class="co">#&gt; The following objects are masked from 'package:base':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     as.Date, as.Date.numeric</span></span>
+<span><span class="co">#&gt; Loading required package: sandwich</span></span>
+<span><span class="co">#&gt; Warning: package 'sandwich' was built under R version 4.3.1</span></span>
+<span><span class="co">#&gt; Loading required package: survival</span></span>
 <span></span>
 <span><span class="co"># Compute CIV with K=2 and conduct inference</span></span>
 <span><span class="va">civ_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/civ.html">civ</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">y</span>, D <span class="op">=</span> <span class="va">D</span>, Z <span class="op">=</span> <span class="va">Z</span>, X <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span>, K <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="va">civ_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">civ_fit</span>, vcov <span class="op">=</span> <span class="fu"><a href="https://sandwich.R-Forge.R-project.org/reference/vcovHC.html" class="external-link">vcovHC</a></span><span class="op">(</span><span class="va">civ_fit</span><span class="op">$</span><span class="va">iv_fit</span>, type <span class="op">=</span> <span class="st">"HC1"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>The CIV estimate and the corresponding standard error are shown below. The associated 95% confidence interval covers the true effect as indicated by the <em>t</em>-value of less than 1.96.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>Estimate <span class="op">=</span> <span class="va">civ_res</span><span class="op">$</span><span class="va">coef</span><span class="op">[</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">]</span>, <span class="st">"Std. Error"</span> <span class="op">=</span> <span class="va">civ_res</span><span class="op">$</span><span class="va">coef</span><span class="op">[</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">]</span>, </span>
 <span>  <span class="st">"t-val."</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">civ_res</span><span class="op">$</span><span class="va">coef</span><span class="op">[</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">]</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">tau_X</span><span class="op">[</span><span class="va">X</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="va">civ_res</span><span class="op">$</span><span class="va">coef</span><span class="op">[</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   Estimate Std. Error     t-val. </span></span>
@@ -145,9 +165,9 @@
 <h2 id="why-does-civ-do-well">Why does CIV do well?<a class="anchor" aria-label="anchor" href="#why-does-civ-do-well"></a>
 </h2>
 <p>The key idea of CIV is to leverage a latent categorical variable <code>Z0</code> with fewer categories that achieves the same population-level fit in the first stage as the observed instrument <code>Z</code>. Under the assumption that the support of the latent categorical variable is fixed with finite cardinality, it is possible to estimate a mapping from the observed categories to the latent categories. This estimated mapping can then be used to simplify the optimal instrumental variable estimator to a finite dimensional regression problem. Asymptotic properties of the CIV estimator then follow if the first-stage mapping can be estimated at a sufficient rate.</p>
-<p>Wiemann (2023) provides sufficient conditions for estimation of the mapping at exponential rate using a K-Conditional-Means (KCMeans) estimator. The proposed KCMeans estimator is exact and computes very quickly with time polynomial in the number of observed categories, thus avoiding heuristic solution approaches otherwise associated with KMeans-type problems. See also the <a href="https://www.thomaswiemann.com/kcmeans" class="external-link"><code>kcmeans</code></a> R package for additional details.</p>
+<p>Wiemann (2023) provides sufficient conditions for estimation of the mapping at exponential rate using a K-Conditional-Means (KCMeans) estimator. The proposed KCMeans estimator is exact and computes very quickly with time polynomial in the number of observed categories, thus avoiding heuristic solution approaches otherwise associated with KMeans-type problems. See also the <a href="https://thomaswiemann.com/kcmeans/" class="external-link"><code>kcmeans</code></a> R package for additional details.</p>
 <p>In the considered data generating process, the underlying optimal instrument <code>Z0</code> has two support points. In the first step, CIV attempts to map values of the observed instrument to these support points. The below code snippet shows that is largely succeeds in doing so: Among the 800 observations, only 16 observations are missclassified.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Compute the clustering of instrument values</span></span>
 <span><span class="va">Z0_hat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">civ_fit</span><span class="op">$</span><span class="va">kcmeans_fit</span>, <span class="va">Z</span>, clusters<span class="op">=</span><span class="cn">T</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span></span>
 <span></span>
@@ -156,7 +176,7 @@
 <span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">missclassified</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 16</span></span></code></pre></div>
 <p>Thanks to classifying values of the instrument in the first step, the IV estimation problem substantially simplifies: Instead of using a categorical instrument with 40 values, CIV is equivalent to using the constructed binary instrument:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Equivalent CIV using the constructed binary instrument</span></span>
 <span><span class="va">civ_fit_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/AER/man/ivreg.html" class="external-link">ivreg</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">D</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">Z0_hat</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">civ_res_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">civ_fit_2</span>, vcov <span class="op">=</span> <span class="fu"><a href="https://sandwich.R-Forge.R-project.org/reference/vcovHC.html" class="external-link">vcovHC</a></span><span class="op">(</span><span class="va">civ_fit_2</span>, type <span class="op">=</span> <span class="st">"HC1"</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">coef</span></span>
@@ -167,7 +187,7 @@
 <span><span class="co">#&gt;   Estimate Std. Error     t-val. </span></span>
 <span><span class="co">#&gt;  1.0063143  0.1086868  0.2409285</span></span></code></pre></div>
 <p>Since correct classification requires very few observations per instrument, CIV is nearly identical to the infeasible oracle estimator that presumes knowledge of the low-dimensional optimal instrument Z0:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Compute the infeasible oracle estimator</span></span>
 <span><span class="va">oracle_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/AER/man/ivreg.html" class="external-link">ivreg</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">D</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">Z0</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">oracle_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">oracle_fit</span>, vcov <span class="op">=</span> <span class="fu"><a href="https://sandwich.R-Forge.R-project.org/reference/vcovHC.html" class="external-link">vcovHC</a></span><span class="op">(</span><span class="va">oracle_fit</span>, type <span class="op">=</span> <span class="st">"HC1"</span><span class="op">)</span><span class="op">)</span></span>
@@ -188,7 +208,7 @@
 <h3 id="tsls">TSLS<a class="anchor" aria-label="anchor" href="#tsls"></a>
 </h3>
 <p>The TSLS estimate is substantially more biased than the CIV estimate.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Estimate two-stage least squares</span></span>
 <span><span class="va">tsls_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/AER/man/ivreg.html" class="external-link">ivreg</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">D</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">Z</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">tsls_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">tsls_fit</span>, vcov <span class="op">=</span> <span class="fu"><a href="https://sandwich.R-Forge.R-project.org/reference/vcovHC.html" class="external-link">vcovHC</a></span><span class="op">(</span><span class="va">tsls_fit</span>, type <span class="op">=</span> <span class="st">"HC1"</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">coef</span></span>
@@ -203,9 +223,10 @@
 <h3 id="post-lasso-iv">Post-Lasso IV<a class="anchor" aria-label="anchor" href="#post-lasso-iv"></a>
 </h3>
 <p>The post-Lasso IV estimator of Belloni et al. (2012) is heavily biased and the corresponding 95% confidence interval does <em>not</em> cover the in-sample treatment effect as indicated by the <em>t</em>-value of more than 1.96.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Estimate post-Lasso IV with the plug-in penalty</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">hdm</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: package 'hdm' was built under R version 4.3.1</span></span>
 <span><span class="va">hdm_fit</span> <span class="op">&lt;-</span> <span class="fu">rlassoIV</span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">D</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">Z</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span>, </span>
 <span>                    select.X <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span>
 <span><span class="va">hdm_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">hdm_fit</span><span class="op">$</span><span class="va">coefficients</span>, <span class="va">hdm_fit</span><span class="op">$</span><span class="va">se</span><span class="op">)</span></span>
@@ -220,8 +241,9 @@
 <h3 id="random-forest-iv">Random Forest IV<a class="anchor" aria-label="anchor" href="#random-forest-iv"></a>
 </h3>
 <p>The random forest-based IV estimator is heavily biased and the corresponding 95% confidence interval does <em>not</em> cover the in-sample treatment effect as indicated by the <em>t</em>-value of more than 1.96.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://imbs-hl.github.io/ranger/" class="external-link">ranger</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: package 'ranger' was built under R version 4.3.1</span></span>
 <span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>D <span class="op">=</span> <span class="va">D</span>, Z <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">Z</span><span class="op">)</span>, X <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">mhat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="fu">ranger</span><span class="op">(</span><span class="va">D</span> <span class="op">~</span>  <span class="va">Z</span> <span class="op">+</span> <span class="va">X</span>, data <span class="op">=</span> <span class="va">df</span><span class="op">)</span>, <span class="va">df</span><span class="op">)</span><span class="op">$</span><span class="va">predictions</span></span>
 <span><span class="va">ranger_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/AER/man/ivreg.html" class="external-link">ivreg</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">D</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span> <span class="op">|</span> <span class="va">mhat</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op">)</span></span>
@@ -244,6 +266,7 @@
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
+<li><a href="https://cloud.r-project.org/package=civ" class="external-link">View on CRAN</a></li>
 <li><a href="https://github.com/thomaswiemann/civ/" class="external-link">Browse source code</a></li>
 <li><a href="https://github.com/thomaswiemann/civ/issues" class="external-link">Report a bug</a></li>
 </ul>
@@ -277,6 +300,7 @@
 <li><a href="https://github.com/thomaswiemann/civ/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/thomaswiemann/civ/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://app.codecov.io/gh/thomaswiemann/civ" class="external-link"><img src="https://codecov.io/gh/thomaswiemann/civ/branch/main/graph/badge.svg?token=PHB9W2TJ6S" alt="codecov"></a></li>
 <li><a href="https://www.codefactor.io/repository/github/thomaswiemann/civ" class="external-link"><img src="https://www.codefactor.io/repository/github/thomaswiemann/civ/badge" alt="CodeFactor"></a></li>
+<li><a href="https://cran.r-project.org/package=civ" class="external-link"><img src="https://www.r-pkg.org/badges/version/civ" alt="CRAN Version"></a></li>
 </ul>
 </div>
 
