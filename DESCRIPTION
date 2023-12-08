@@ -1,11 +1,11 @@
 Package: civ
 Title: Categorical Instrumental Variables
-Version: 0.0.0.9000
-Date: 2023-10-27
+Version: 0.1.0.9000
+Date: 2023-12-07
 Authors@R: c(
     person("Thomas", "Wiemann", role = c("aut", "cre"), email = "wiemann@uchicago.edu"))
 Description: Implementation of the categorical instrumental variable (CIV) 
-    estimator proposed by Wiemann (2023). CIV allows for optimal instrumental 
+    estimator proposed by Wiemann (2023) <arXiv:2311.17021>. CIV allows for optimal instrumental 
     variable estimation in settings with relatively few observations per 
     category. To obtain valid inference in these challenging settings, CIV
     leverages a regularization assumption that implies existence of a latent 
@@ -13,9 +13,8 @@ Description: Implementation of the categorical instrumental variable (CIV)
     stage fit as the observed instrument.
 License: GPL (>= 3)
 URL: https://github.com/thomaswiemann/civ
-BugReports:  https://github.com/thomaswiemann/civ/issues
+BugReports: https://github.com/thomaswiemann/civ/issues
 Encoding: UTF-8
-LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Depends: 
@@ -29,6 +28,5 @@ Suggests:
     covr,
     knitr,
     rmarkdown
-Remotes: thomaswiemann/kcmeans
 Config/testthat/edition: 3
 VignetteBuilder: knitr
