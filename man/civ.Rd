@@ -4,7 +4,7 @@
 \alias{civ}
 \title{Categorical Instrumental Variable Estimator.}
 \usage{
-civ(y, D, Z, X = NULL, K = 2)
+civ(y, D, Z, X = NULL, K = 2, regularize_EDZ = FALSE)
 }
 \arguments{
 \item{y}{The outcome variable, a numerical vector.}
@@ -18,6 +18,9 @@ categorical instrument.}
 
 \item{K}{The number of support points of the estimated instrument
 \eqn{\hat{m}_K}, an integer  greater than 2.}
+
+\item{regularize_EDZ}{A boolean indicating whether \eqn{E[D|Z]} should be
+regularized directly rather than \eqn{E[D - X^\top\pi\vert Z]}.}
 }
 \value{
 \code{civ} returns an object of S3 class  \code{civ}. An object of
@@ -56,5 +59,5 @@ summary(civ_fit)
 Fox J, Kleiber C, Zeileis A (2023). "ivreg: Instrumental-Variables Regression
 by '2SLS', '2SM', or '2SMM', with Diagnostics". R package.
 
-Wiemann T (2023). "Optimal Categorical Instruments."
+Wiemann T (2023). "Optimal Categorical Instruments." https://arxiv.org/abs/2311.17021
 }

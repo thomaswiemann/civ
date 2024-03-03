@@ -10,6 +10,8 @@
 #' @param X An optional matrix of control variables.
 #' @param K The number of support points of the estimated instrument
 #'     \eqn{\hat{m}_K}, an integer  greater than 2.
+#' @param regularize_EDZ A boolean indicating whether \eqn{E[D|Z]} should be
+#'     regularized directly rather than \eqn{E[D - X^\top\pi\vert Z]}.
 #'
 #' @return \code{civ} returns an object of S3 class  \code{civ}. An object of
 #'     class \code{civ} is a list containing the following components:
@@ -45,15 +47,20 @@
 #' # Estimate categorical instrument variable estimator with K = 2
 #' civ_fit <- civ(y, D, Z, K = 3)
 #' summary(civ_fit)
-civ <- function(y, D, Z, X = NULL, K = 2) {
+civ <- function(y, D, Z, X = NULL, K = 2, regularize_EDZ = FALSE) {
 
   # Data parameters
   nobs <- length(y)
 
   # Estimate the optimal instrument
-  ZX <- cbind(Z, X)
-  kcmeans_fit <- kcmeans::kcmeans(D, ZX, K = K)
-  m_hat <- stats::predict(kcmeans_fit, ZX)
+  if (regularize_EDZ) {
+    kcmeans_fit <- kcmeans::kcmeans(D, Z, K = K)
+    m_hat <- stats::predict(kcmeans_fit, Z)
+  } else {
+    ZX <- cbind(Z, X)
+    kcmeans_fit <- kcmeans::kcmeans(D, ZX, K = K)
+    m_hat <- stats::predict(kcmeans_fit, ZX)
+  }#IFELSE
 
   # Compute TSLS with the estimated optimal instrument
   if (is.null(X)) {

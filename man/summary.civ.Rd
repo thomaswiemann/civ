@@ -36,7 +36,7 @@ summary(civ_fit)
 Fox J, Kleiber C, Zeileis A (2023). "ivreg: Instrumental-Variables Regression
 by '2SLS', '2SM', or '2SMM', with Diagnostics". R package.
 
-Wiemann T (2023). "Optimal Categorical Instruments."
+Wiemann T (2023). "Optimal Categorical Instruments." https://arxiv.org/abs/2311.17021
 }
 \seealso{
 \code{\link[AER:summary.ivreg]{AER::summary.ivreg()}}
