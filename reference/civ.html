@@ -64,7 +64,7 @@ estimator.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">civ</span><span class="op">(</span><span class="va">y</span>, <span class="va">D</span>, <span class="va">Z</span>, X <span class="op">=</span> <span class="cn">NULL</span>, K <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">civ</span><span class="op">(</span><span class="va">y</span>, <span class="va">D</span>, <span class="va">Z</span>, X <span class="op">=</span> <span class="cn">NULL</span>, K <span class="op">=</span> <span class="fl">2</span>, regularize_EDZ <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -89,6 +89,11 @@ categorical instrument.</p></dd>
 <dt>K</dt>
 <dd><p>The number of support points of the estimated instrument
 \(\hat{m}_K\), an integer  greater than 2.</p></dd>
+
+
+<dt>regularize_EDZ</dt>
+<dd><p>A boolean indicating whether \(E[D|Z]\) should be
+regularized directly rather than \(E[D - X^\top\pi\vert Z]\).</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -120,7 +125,7 @@ See above.</p></dd>
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
     <p>Fox J, Kleiber C, Zeileis A (2023). "ivreg: Instrumental-Variables Regression
 by '2SLS', '2SM', or '2SMM', with Diagnostics". R package.</p>
-<p>Wiemann T (2023). "Optimal Categorical Instruments."</p>
+<p>Wiemann T (2023). "Optimal Categorical Instruments." https://arxiv.org/abs/2311.17021</p>
     </div>
 
     <div class="section level2">
@@ -142,18 +147,18 @@ by '2SLS', '2SM', or '2SMM', with Diagnostics". R package.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Residuals:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       Min        1Q    Median        3Q       Max </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -3.478155 -0.679226 -0.005515  0.678533  2.988659 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -2.713529 -0.696460 -0.005709  0.664267  3.179906 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             Estimate Std. Error t value Pr(&gt;|t|)    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept) -0.04189    0.05337  -0.785    0.433    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> D            1.06552    0.07792  13.675   &lt;2e-16 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept) -0.04118    0.04866  -0.846    0.398    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> D            0.98494    0.07025  14.020   &lt;2e-16 ***</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Residual standard error: 0.9996 on 798 degrees of freedom</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Multiple R-Squared: 0.7237,	Adjusted R-squared: 0.7234 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Wald test:   187 on 1 and 798 DF,  p-value: &lt; 2.2e-16 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Residual standard error: 0.9855 on 798 degrees of freedom</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Multiple R-Squared:   0.7,	Adjusted R-squared: 0.6996 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Wald test: 196.6 on 1 and 798 DF,  p-value: &lt; 2.2e-16 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
