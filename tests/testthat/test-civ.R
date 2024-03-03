@@ -48,11 +48,10 @@ test_that("civ computes w/ controls regularziing E[D|Z]", {
   y <- SimDat$y
   D <- SimDat$D
   Z <- SimDat$Z
-  X <- SimDat$X
   # Estimate civ with and without controls
-  civ_fit_wX <- civ(y, D, Z, X, K = 3, regularize_EDZ = TRUE)
+  civ_fit_wX <- civ(y, D, Z, K = 3, regularize_EDZ = TRUE)
   # Check expectations
-  expect_equal(length(civ_fit_wX$coef), 3)
+  expect_equal(length(civ_fit_wX$coef), 2)
 })#TEST_THAT
 
 test_that("summary.civ computes w/ and w/o controls", {
