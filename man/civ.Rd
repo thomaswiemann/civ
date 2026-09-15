@@ -4,7 +4,7 @@
 \alias{civ}
 \title{Categorical Instrumental Variable Estimator.}
 \usage{
-civ(y, D, Z, X = NULL, K = 2, regularize_EDZ = FALSE)
+civ(y, D, Z, X = NULL, K = 2, K_bar = NULL, regularize_EDZ = FALSE)
 }
 \arguments{
 \item{y}{The outcome variable, a numerical vector.}
@@ -17,7 +17,12 @@ categorical instrument.}
 \item{X}{An optional matrix of control variables.}
 
 \item{K}{The number of support points of the estimated instrument
-\eqn{\hat{m}_K}, an integer  greater than 2.}
+\eqn{\hat{m}_K}, an integer greater than or equal to 2; or the
+character string \code{"bic"} to select \eqn{K} via
+\code{\link{civ_select_K}} (requires \code{K_bar}).}
+
+\item{K_bar}{Optional upper bound \eqn{\bar{K}} when \code{K = "bic"}.
+Ignored when \code{K} is numeric.}
 
 \item{regularize_EDZ}{A boolean indicating whether \eqn{E[D|Z]} should be
 regularized directly rather than \eqn{E[D - X^\top\pi\vert Z]}.}
@@ -34,8 +39,10 @@ See also \code{\link[AER:ivreg]{AER::ivreg()}} for details.}
 \item{\code{kcmeans_fit}}{Object of class \code{kcmeans} from the
 K-Conditional-Means regression of \code{D} on \code{Z} and
 \code{X}. See also \code{\link[kcmeans:kcmeans]{kcmeans::kcmeans()}} for details.}
-\item{K}{Pass-through of selected user-provided arguments.
-See above.}
+\item{K}{Selected number of support points (user-provided or
+BIC-selected).}
+\item{\code{bic}}{If \code{K = "bic"}, the list returned by
+\code{\link{civ_select_K}}; otherwise \code{NULL}.}
 }
 }
 \description{

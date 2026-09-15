@@ -9,7 +9,11 @@
 #'     categorical instrument.
 #' @param X An optional matrix of control variables.
 #' @param K The number of support points of the estimated instrument
-#'     \eqn{\hat{m}_K}, an integer  greater than 2.
+#'     \eqn{\hat{m}_K}, an integer greater than or equal to 2; or the
+#'     character string \code{"bic"} to select \eqn{K} via
+#'     [civ_select_K()] (requires \code{K_bar}).
+#' @param K_bar Optional upper bound \eqn{\bar{K}} when \code{K = "bic"}.
+#'     Ignored when \code{K} is numeric.
 #' @param regularize_EDZ A boolean indicating whether \eqn{E[D|Z]} should be
 #'     regularized directly rather than \eqn{E[D - X^\top\pi\vert Z]}.
 #'
@@ -24,8 +28,10 @@
 #'         \item{\code{kcmeans_fit}}{Object of class \code{kcmeans} from the
 #'             K-Conditional-Means regression of \code{D} on \code{Z} and
 #'             \code{X}. See also [kcmeans::kcmeans()] for details.}
-#'         \item{K}{Pass-through of selected user-provided arguments.
-#'             See above.}
+#'         \item{K}{Selected number of support points (user-provided or
+#'             BIC-selected).}
+#'         \item{\code{bic}}{If \code{K = "bic"}, the list returned by
+#'             [civ_select_K()]; otherwise \code{NULL}.}
 #'     }
 #' @export
 #'
@@ -47,10 +53,24 @@
 #' # Estimate categorical instrument variable estimator with K = 2
 #' civ_fit <- civ(y, D, Z, K = 3)
 #' summary(civ_fit)
-civ <- function(y, D, Z, X = NULL, K = 2, regularize_EDZ = FALSE) {
+civ <- function(y, D, Z, X = NULL, K = 2, K_bar = NULL,
+                regularize_EDZ = FALSE) {
 
   # Data parameters
   nobs <- length(y)
+
+  # Optional BIC selection of K (Appendix B)
+  bic_sel <- NULL
+  if (is.character(K) && identical(K, "bic")) {
+    bic_sel <- civ_select_K(D, Z, X = X, K_bar = K_bar,
+                            regularize_EDZ = regularize_EDZ)
+    K <- bic_sel$K
+  } else {
+    K <- as.integer(K)[1L]
+    if (is.na(K) || K < 2L) {
+      stop("'K' must be an integer >= 2 or \"bic\".", call. = FALSE)
+    }
+  }
 
   # Estimate the optimal instrument
   if (regularize_EDZ) {
@@ -74,7 +94,8 @@ civ <- function(y, D, Z, X = NULL, K = 2, regularize_EDZ = FALSE) {
   civ_fit <- list(coef = iv_fit$coefficients,
                   iv_fit = iv_fit,
                   kcmeans_fit = kcmeans_fit,
-                  K = K)
+                  K = K,
+                  bic = bic_sel)
   class(civ_fit) <- "civ" # define S3 class
   return(civ_fit)
 }#CIV

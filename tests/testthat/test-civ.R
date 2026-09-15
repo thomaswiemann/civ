@@ -68,3 +68,33 @@ test_that("summary.civ computes w/ and w/o controls", {
   # Check expectations
   expect_equal(length(summary_res), 12)
 })#TEST_THAT
+
+test_that("civ_select_K recovers known K0 on a large sample", {
+  set.seed(42)
+  nobs <- 4000
+  K0 <- 2L
+  Z <- sample(1:20, nobs, replace = TRUE)
+  Z0 <- Z %% K0
+  U_V <- matrix(rnorm(2 * nobs, 0, 1), nobs, 2) %*%
+    chol(matrix(c(1, 0.6, 0.6, 1), 2, 2))
+  D <- Z0 + U_V[, 2]
+  sel <- civ_select_K(D, Z, K_bar = 5L)
+  expect_equal(sel$K, K0)
+  expect_equal(names(sel$bic), as.character(2:5))
+  expect_true(all(is.finite(sel$bic)))
+})#TEST_THAT
+
+test_that("civ with K = 'bic' stores selection and fits", {
+  set.seed(7)
+  nobs <- 2000
+  Z <- sample(1:12, nobs, replace = TRUE)
+  Z0 <- Z %% 2
+  U_V <- matrix(rnorm(2 * nobs, 0, 1), nobs, 2) %*%
+    chol(matrix(c(1, 0.6, 0.6, 1), 2, 2))
+  D <- Z0 + U_V[, 2]
+  y <- D + U_V[, 1]
+  civ_fit <- civ(y, D, Z, K = "bic", K_bar = 4L)
+  expect_equal(civ_fit$K, civ_fit$bic$K)
+  expect_equal(length(civ_fit$coef), 2)
+  expect_error(civ(y, D, Z, K = "bic"), "'K_bar'")
+})#TEST_THAT

@@ -2,3 +2,4 @@
 
 S3method(summary,civ)
 export(civ)
+export(civ_select_K)
